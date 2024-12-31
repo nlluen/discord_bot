@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 members.json
+announcements.json
 
 # Environments
 .env
@@ -53,12 +54,6 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
-
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
 
 # Sphinx documentation
 docs/_build/

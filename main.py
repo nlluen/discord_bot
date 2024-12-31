@@ -10,7 +10,7 @@ intents = discord.Intents.all()
 intents.message_content = True
 bot = commands.Bot(command_prefix='+', intents=intents)
 
-print(os.getenv('TOKEN'))
+#print(os.getenv('TOKEN'))
 
 
 @bot.event
