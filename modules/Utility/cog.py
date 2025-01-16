@@ -92,6 +92,7 @@ class Utility(commands.Cog):
         embed = discord.Embed(title=f"Role Info: {role.name}", color=discord.Color.blue())
         embed.add_field(name="Members with this role", value=len(members_with_role), inline=False)
         embed.add_field(name="Members", value=member_names, inline=False)
+        embed.add_field(name="Role ID", value=role.id, inline=False)
         await interaction.response.send_message(embed=embed)
 
     @app_commands.command(name='serverinfo', description='Get the general info for the server!')
