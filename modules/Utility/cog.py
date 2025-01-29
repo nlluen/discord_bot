@@ -97,7 +97,7 @@ class Utility(commands.Cog):
 
     @app_commands.command(name='serverinfo', description='Get the general info for the server!')
     @app_commands.guilds(guild_id)
-    async def server_info(self, interaction: discord.Interaction):
+    async def serverinfo(self, interaction: discord.Interaction):
         guild = interaction.guild
         guild_name = guild.name
         guild_description = guild.description
@@ -115,6 +115,17 @@ class Utility(commands.Cog):
         embed.add_field(name="Text Channels", value=guild_text_channel_count, inline=False)
         embed.add_field(name="Voice Channels", value=guild_voice_channel_count)
         await interaction.response.send_message(embed=embed)
+
+    @app_commands.command(name="servericon", description="Get the server's current icon!")
+    @app_commands.guilds(guild_id)
+    async def servericon(self, interaction: discord.Interaction):
+        guild = interaction.guild
+        guild_icon_url = guild.icon.url
+        guild_name = guild.name
+        embed = discord.Embed(title=f"{guild_name}'s Icon", color=discord.Color.dark_gold())
+        embed.set_image(url=guild_icon_url)
+        await interaction.response.send_message(embed=embed)
+
 
     
 

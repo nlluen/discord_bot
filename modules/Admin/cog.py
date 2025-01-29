@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 from config import guild_id, announcement_channel_id
 
@@ -116,6 +116,13 @@ class Admin(commands.Cog):
             await interaction.response.send_message(f"Removed {role.name} Role from {user.display_name}.", ephemeral=True)
         else:
             await interaction.response.send_message(f"{user.display_name} does not have this role.", ephemeral=True)
+    
+    # @app_commands.command(name='timeout', description="Timeout a member.")
+    # @app_commands.guilds(guild_id)
+    # @app_commands.check(is_mod)
+    # async def timeout(self, interaction: discord.Interaction, user: discord.Member, days: int, reason: str = None):
+    #     duration = timedelta(days=days)
+    #     user.timeout(duration = duration, reason=reason)
 
         
 

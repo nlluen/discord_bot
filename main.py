@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
 from discord import Interaction
 import asyncio
@@ -12,11 +13,22 @@ bot = commands.Bot(command_prefix='+', intents=intents)
 
 #print(os.getenv('TOKEN'))
 
+# class FishGroup(app_commands.Group):
+
+#     def __init__(self):
+#         super().__init__(name="fish", description="Fish group")
+#         # self.bot = bot
+
+#     #@app_commands.guilds(guild_id)
+#     @app_commands.command(name="catch", description="catch the fish!")
+#     async def catch(self, interaction: discord.Interaction):
+#         await interaction.response.send_message("You Caught it!")
 
 @bot.event
 async def on_ready():
     activity = discord.Activity(type=discord.ActivityType.watching, name="The Degenerates of this Server")
     await bot.change_presence(activity=activity)
+    #await bot.tree.add_command(FishGroup())
     synced = await bot.tree.sync(guild=discord.Object(guild_id))
     print("Bot is ready")
     print(len(synced))
@@ -39,6 +51,7 @@ async def stop(ctx):
     if allowed_role1 or allowed_role2 in ctx.author.roles:
         await bot.get_channel(bot_test_channel_id).send("I am getting very sleepy...why is it all turning black...")
         await bot.close()
+        
 
 
 async def load():
