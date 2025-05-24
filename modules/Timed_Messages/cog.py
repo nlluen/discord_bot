@@ -26,13 +26,13 @@ class Timed_Messages(commands.Cog):
         self.birthday_messages.start()
 
     # @commands.cooldown(1, 1, commands.BucketType.user)
-    @tasks.loop(seconds=60)
+    @tasks.loop(seconds=50)
     async def daily_messages(self):
         date = datetime.datetime.now()
+        hour = date.hour
+        minute = date.minute
         gen_channel = self.bot.get_channel(gen_channel_id)
         if gen_channel:
-            hour = date.hour
-            minute = date.minute
             if hour == 8 and minute == 00:
                 morning_message = get_morning_messages()
                 await gen_channel.send(date.strftime(f"{morning_message} Today is %B %d, %Y"))
@@ -55,7 +55,7 @@ class Timed_Messages(commands.Cog):
         else:
             print('no work')
 
-    @tasks.loop(seconds=10)
+    @tasks.loop(seconds=40)
     async def birthday_messages(self):
         date = datetime.datetime.now()
         todays_month = date.month

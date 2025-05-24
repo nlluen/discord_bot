@@ -17,6 +17,9 @@ class Events(commands.Cog):
     # @commands.Cog.listener()
     # async def on_member_leave(self, member: discord.Member):
 
+    # @commands.Cog.listener()
+    # async def 
+
 
 async def setup(bot):
     await bot.add_cog(Events(bot))

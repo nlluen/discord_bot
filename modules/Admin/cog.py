@@ -77,6 +77,34 @@ class Admin(commands.Cog):
         else:
             await interaction.response.send_message(f"{user.display_name} does not have this role.", ephemeral=True)
 
+    # @app_commands.command(name='update_incident', description="Take away a user's role")
+    # @app_commands.guilds(guild_id)
+    # @app_commands.check(is_mod)
+    # async def update_bio(self, interaction: discord.Interaction, title: str, date: str):
+    #     with open('incident.json', 'r') as rf:
+    #         incident = json.load(rf)
+
+    #     channel_id = interaction.channel_id
+
+    #     try:
+    #         incident_date = datetime.strptime(date, '%m/%d/%Y')            
+    #         formatted_date = f'{incident_date.month}/{incident_date.day}/{incident_date.year}'
+            
+    #     except ValueError:
+    #         await interaction.response.send_message("Please input a valid calendar date in the mm/dd format", ephemeral=True)
+    #         return
+        
+    #     dic = {
+    #         "title": title,
+    #         "channel_id": channel_id,
+    #         "date": formatted_date,
+    #     }
+
+    #     print(dic)
+
+        # with open('incident.json', 'w') as file:
+        #     json.dump(incident, file, indent=4)
+
     # @app_commands.command(name='reset_emotes', description="Take away a user's role")
     # @app_commands.guilds(guild_id)
     # @app_commands.check(is_mod)
