@@ -53,11 +53,13 @@ async def stop(ctx):
         await bot.close()
         
 
-
 async def load():
-    for folder in os.listdir('modules'):
-        if os.path.exists(os.path.join('modules', folder, 'cog.py')):
-            await bot.load_extension(f'modules.{folder}.cog')
+    cogs = [f"cogs.{filename[:-3]}" for filename in os.listdir("cogs") if filename.endswith(".py")]
+    for cog in cogs:
+        await bot.load_extension(cog)
+    # for folder in os.listdir('modules'):
+    #     if os.path.exists(os.path.join('modules', folder, 'cog.py')):
+    #         await bot.load_extension(f'modules.{folder}.cog')
 
 
 async def main():
