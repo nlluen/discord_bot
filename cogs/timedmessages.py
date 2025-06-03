@@ -20,6 +20,18 @@ def get_morning_messages():
     message = message_list[num]
     return message
 
+est = datetime.datetime.now().astimezone().tzinfo
+
+times = [
+    datetime.time(hour=8, minute=0, second=0, tzinfo=est),
+    datetime.time(hour=16, minute=20, second=0, tzinfo=est),
+    datetime.time(hour=17, minute=0, second=0, tzinfo=est),
+    datetime.time(hour=21, minute=46, second=0, tzinfo=est),
+    datetime.time(hour=23, minute=11, second=0, tzinfo=est),
+    datetime.time(hour=23, minute=30, second=0, tzinfo=est),
+]
+
+birthday_time = datetime.time(hour=0, minute=5, second=0, tzinfo=est)
 
 class TimedMessages(commands.Cog):
     def __init__(self, bot):
@@ -28,14 +40,14 @@ class TimedMessages(commands.Cog):
         self.birthday_messages.start()
 
     # @commands.cooldown(1, 1, commands.BucketType.user)
-    @tasks.loop(seconds=50)
+    @tasks.loop(time=times)
     async def daily_messages(self):
         date = datetime.datetime.now()
         hour = date.hour
         minute = date.minute
         gen_channel = self.bot.get_channel(gen_channel_id)
         if gen_channel:
-            if hour == 8 and minute == 00:
+            if hour == 8 and minute == 0:
                 morning_message = get_morning_messages()
                 await gen_channel.send(date.strftime(f"{morning_message} Today is %B %d, %Y"))
                 # days = updateHolidays()
@@ -45,7 +57,7 @@ class TimedMessages(commands.Cog):
                 # await gen_channel.send(embed=embed)
             if hour == 16 and minute == 20:
                 await gen_channel.send("420")
-            if hour == 17 and minute == 00:
+            if hour == 17 and minute == 0:
                 if date.weekday() < 5:
                     work_role = self.bot.get_guild(guild_id).get_role(worker_role_id)
                     work_message = get_work_message(work_role)
@@ -55,28 +67,48 @@ class TimedMessages(commands.Cog):
             if hour == 23 and minute == 30:
                 await gen_channel.send("Getting sleepy... Goodnight everyone see you all tomorrow. Sweet dreams :)")
         else:
-            print('no work')
+            print('gen chat not found')
 
-    @tasks.loop(seconds=50)
+    @tasks.loop(time=birthday_time)
     async def birthday_messages(self):
         date = datetime.datetime.now()
-        todays_month = date.month
-        todays_day = date.day
+        month = date.month
+        day = date.day
         with open('members.json', 'r') as rf:
             members = json.load(rf)
         for member_id in members:
             birthday_month, birthday_day = map(int, members[member_id]["Birthday"].split('/'))
-            if todays_month == birthday_month and todays_day == birthday_day:
-                if date.hour == 00 and date.minute == 5:
-                    gen_channel = self.bot.get_channel(gen_channel_id)
-                    if gen_channel:
-                        member = self.bot.get_guild(guild_id).get_member(int(member_id))
-                        color = members[member_id]["Color"]
-                        em = discord.Embed(title="Happy Birthday", color=discord.Color.from_str(color))
-                        em.description = f"Today is <@{member_id}>'s birthday! Everyone wish them a happy birthday :D"
-                        pfp = member.display_avatar
-                        em.set_thumbnail(url=f'{pfp}')
-                        await gen_channel.send(embed=em)
+            if month == birthday_month and day == birthday_day:
+                gen_channel = self.bot.get_channel(gen_channel_id)
+                if gen_channel:
+                    member = self.bot.get_guild(guild_id).get_member(int(member_id))
+                    color = members[member_id]["Color"]
+                    em = discord.Embed(title="Happy Birthday", color=discord.Color.from_str(color))
+                    em.description = f"Today is <@{member_id}>'s birthday! Everyone wish them a happy birthday :D"
+                    pfp = member.display_avatar
+                    em.set_thumbnail(url=f'{pfp}')
+                    await gen_channel.send(embed=em)
+
+    # @tasks.loop(seconds=50)
+    # async def birthday_messages(self):
+    #     date = datetime.datetime.now()
+    #     todays_month = date.month
+    #     todays_day = date.day
+    #     with open('members.json', 'r') as rf:
+    #         members = json.load(rf)
+    #     for member_id in members:
+    #         birthday_month, birthday_day = map(int, members[member_id]["Birthday"].split('/'))
+    #         if todays_month == birthday_month and todays_day == birthday_day:
+    #             if date.hour == 00 and date.minute == 5:
+    #                 gen_channel = self.bot.get_channel(gen_channel_id)
+    #                 if gen_channel:
+    #                     member = self.bot.get_guild(guild_id).get_member(int(member_id))
+    #                     color = members[member_id]["Color"]
+    #                     em = discord.Embed(title="Happy Birthday", color=discord.Color.from_str(color))
+    #                     em.description = f"Today is <@{member_id}>'s birthday! Everyone wish them a happy birthday :D"
+    #                     pfp = member.display_avatar
+    #                     em.set_thumbnail(url=f'{pfp}')
+    #                     await gen_channel.send(embed=em)
 
     @birthday_messages.before_loop
     @daily_messages.before_loop
