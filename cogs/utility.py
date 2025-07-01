@@ -129,51 +129,51 @@ class Utility(commands.Cog):
         embed.set_image(url=guild_icon_url)
         await interaction.response.send_message(embed=embed)
 
-    @app_commands.command(name="create_announcement", description="Queue your announcement for a mod to approve")
-    @app_commands.guilds(guild_id)
-    async def create_announcement(self, interaction: discord.Interaction, brief_description: str, message: str):
-
-        # print(interaction.created_at.astimezone(pytz.timezone('US/Eastern')).strftime('%m/%d/%Y at %H:%M:%S'))
-        dic = {
-            "Description": brief_description,
-            "Message": message,
-            "Announcer": interaction.user.id,
-            "Time_Created": interaction.created_at.astimezone(pytz.timezone('US/Eastern')).strftime(
-                '%m/%d/%Y at %I:%M %p')
-        }
-
-        with open('announcements.json', 'r') as rf:
-            announcements = json.load(rf)
-
-        if len(announcements) == 5:
-            await interaction.response.send_message("Too many announcements queued, ask the mods to clear them.")
-            return
-
-        announcements.append(dic)
-
-        with open('announcements.json', 'w') as wf:
-            json.dump(announcements, wf, indent=4)
-
-        await interaction.response.send_message(
-            "Thank you for your announcement, a mod will review and approve it shortly.")
-
-    @app_commands.command(name='announcements', description="View all queued announcements")
-    @app_commands.guilds(guild_id)
-    async def announcements(self, interaction: discord.Interaction):
-        embed = discord.Embed(title="Announcements Queued", color=discord.Color.blue())
-
-        with open("announcements.json", 'r') as rf:
-            announcements = json.load(rf)
-
-        embed.description = ""
-        for i, announcement in enumerate(announcements):
-            # print(announcement)
-            announcer = interaction.guild.get_member(announcement['Announcer'])
-            embed.description += f"{i + 1}: " + f"{announcement['Description']} - {announcer.display_name}" + "\n"
-            # embed.add_field(name= f"{i+1}", value= f"{announcement['Description']}", inline=True)
-            # embed.add_field(name="Time Queued", value=f"{announcement['Time_Created']}", inline=True)
-
-        await interaction.response.send_message(embed=embed)
+    # @app_commands.command(name="create_announcement", description="Queue your announcement for a mod to approve")
+    # @app_commands.guilds(guild_id)
+    # async def create_announcement(self, interaction: discord.Interaction, brief_description: str, message: str):
+    #
+    #     # print(interaction.created_at.astimezone(pytz.timezone('US/Eastern')).strftime('%m/%d/%Y at %H:%M:%S'))
+    #     dic = {
+    #         "Description": brief_description,
+    #         "Message": message,
+    #         "Announcer": interaction.user.id,
+    #         "Time_Created": interaction.created_at.astimezone(pytz.timezone('US/Eastern')).strftime(
+    #             '%m/%d/%Y at %I:%M %p')
+    #     }
+    #
+    #     with open('announcements.json', 'r') as rf:
+    #         announcements = json.load(rf)
+    #
+    #     if len(announcements) == 5:
+    #         await interaction.response.send_message("Too many announcements queued, ask the mods to clear them.")
+    #         return
+    #
+    #     announcements.append(dic)
+    #
+    #     with open('announcements.json', 'w') as wf:
+    #         json.dump(announcements, wf, indent=4)
+    #
+    #     await interaction.response.send_message(
+    #         "Thank you for your announcement, a mod will review and approve it shortly.")
+    #
+    # @app_commands.command(name='announcements', description="View all queued announcements")
+    # @app_commands.guilds(guild_id)
+    # async def announcements(self, interaction: discord.Interaction):
+    #     embed = discord.Embed(title="Announcements Queued", color=discord.Color.blue())
+    #
+    #     with open("announcements.json", 'r') as rf:
+    #         announcements = json.load(rf)
+    #
+    #     embed.description = ""
+    #     for i, announcement in enumerate(announcements):
+    #         # print(announcement)
+    #         announcer = interaction.guild.get_member(announcement['Announcer'])
+    #         embed.description += f"{i + 1}: " + f"{announcement['Description']} - {announcer.display_name}" + "\n"
+    #         # embed.add_field(name= f"{i+1}", value= f"{announcement['Description']}", inline=True)
+    #         # embed.add_field(name="Time Queued", value=f"{announcement['Time_Created']}", inline=True)
+    #
+    #     await interaction.response.send_message(embed=embed)
 
 
 async def setup(bot):
