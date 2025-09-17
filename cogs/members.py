@@ -174,11 +174,47 @@ class Member(commands.Cog):
                 )
             )
 
-            embed = discord.Embed(title=f"Degen Birthdays - {len(sorted_birthdays)}", color=discord.Color.blue())
-            for member_id, member_data in sorted_birthdays.items():
+            items = list(members.items())
+
+            mid = len(items) // 2
+            
+            # If odd move midpoint over by 1
+            if len(items) % 2:
+                mid+=1
+
+            first_half = items[:mid]
+            second_half = items[mid:]
+
+            interleaved = []
+            for a, b in zip(first_half, second_half):
+                interleaved.extend([a, b])
+
+            # If odd length, add the leftover from second_half
+            if len(first_half) > len(second_half):
+                interleaved.append(first_half[-1])
+
+            # Rebuild dictionary in new order
+            freaky_style = dict(interleaved)
+
+            columns = 0
+            newline=False
+
+            embed = discord.Embed(title=f"Degen Birthdays - {len(sorted_birthdays)} (Please memorize the entire list)", color=discord.Color.blue())
+            for member_id, member_data in freaky_style.items():
+                if newline: 
+                    embed.add_field(name='\t',value='\t')
+                    newline=False
+
                 name = member_data["Name"]
                 birthday = member_data["Birthday"]
-                embed.add_field(name=name, value=birthday, inline=False)
+                embed.add_field(name=name, value=birthday, inline=True)
+                columns+=1
+
+                if columns==2:
+                    columns=0
+                    newline=True
+            
+            embed.add_field(name='\t',value='\t')
             await interaction.response.send_message(embed=embed)
 
         else:
