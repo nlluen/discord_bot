@@ -159,9 +159,23 @@ class Member(commands.Cog):
     async def birthday(self, interaction: discord.Interaction, user: discord.User = None):
         members = self.get_registered_members()
 
+        print(members)
+
+        date_format = "%m/%d"
+        
+        for member_id, member_data in members.items():
+            try:
+                parsed_date = datetime.strptime(member_data["Birthday"], date_format)
+            except ValueError:
+                # If birthday is missing leading zeros (e.g., "7/4"), handle it:
+                parsed_date = datetime.strptime(member_data["Birthday"], "%m/%d".lstrip())
+            member_data["Birthday"] = parsed_date.strftime(date_format)
+        
+        self.update_registered_members(members)
+        
+        print(members)
+
         if user is None:
-            date_format = "%m/%d"
-            
             sorted_birthdays = dict(
                 sorted(
                     members.items(), 
