@@ -174,7 +174,9 @@ class Member(commands.Cog):
                 )
             )
 
-            items = list(members.items())
+            print(f"[DEBUG TRACE] sorted birthdays: \n {sorted_birthdays} \n" )
+
+            items = list(sorted_birthdays.items())
 
             mid = len(items) // 2
             
@@ -196,6 +198,8 @@ class Member(commands.Cog):
             # Rebuild dictionary in new order
             freaky_style = dict(interleaved)
 
+            print(f"[DEBUG TRACE] interleaved dict: \n {freaky_style} \n")
+
             columns = 0
             newline=False
 
@@ -208,6 +212,8 @@ class Member(commands.Cog):
                 name = member_data["Name"]
                 birthday = member_data["Birthday"]
                 embed.add_field(name=name, value=birthday, inline=True)
+                print(f"[DEBUG TRACE] added field: {name} + {birthday} \n")
+
                 columns+=1
 
                 if columns==2:
@@ -215,7 +221,13 @@ class Member(commands.Cog):
                     newline=True
             
             embed.add_field(name='\t',value='\t')
-            await interaction.response.send_message(embed=embed)
+            try:
+                print(f"[DEBUG TRACE] preparing to send embed")
+                await interaction.response.send_message(embed=embed)
+                print(f"[DEBUG TRACE] embed sent")
+            except Exception as e:
+                print(e)
+                await interaction.response.send_message("uuuhhh check the logs")
 
         else:
             user_id = str(user.id)
